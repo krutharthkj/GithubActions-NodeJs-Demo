@@ -1,4 +1,4 @@
-name: Martix- nodejs application
+name: build nodejs application
 on: # multiple triggers when this workflow can run
  workflow_dispatch:
  push:
@@ -11,8 +11,14 @@ jobs:
   job1:
     continue-on-error: true  # continue to run the job even if there is an error
     strategy:
-     matrix:  # it is like a loop to repeat the stpes on each operating_system value
-      operating_system: [ubuntu-latest,windows-latest]    
+     matrix:  # it is like a loop to repeat the stpes on each operating_system value and each artifact name
+      operating_system: [ubuntu-latest,windows-latest]
+      artifact_name: [artifact-node-ubuntu,artifact-node-windows]
+      exclude:  # dont execute these combinations
+      - operating_system: ubuntu-latest
+        artifact_name: artifact-node-windows
+      - operating_system: windows-latest
+        artifact_name: artifact-node-ubuntu
     runs-on: ${{ matrix.operating_system }}
     steps: 
     - name: Clone the repo 
@@ -31,5 +37,5 @@ jobs:
     - name: Upload Artifact 
       uses: actions/upload-artifact@v4
       with: 
-        name: nodejs-artifact
+        name: ${{ matrix.artifact_name }} # we need to add a variable which changes as per the OS
         path: dist/
