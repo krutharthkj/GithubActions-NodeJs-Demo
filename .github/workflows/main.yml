@@ -1,31 +1,35 @@
+---
+
 name: build nodejs application
-on: # multiple triggers when this workflow can run
+on: 
  workflow_dispatch:
- push:
-   branches:
-     - master
+ push: 
+  branches:
+   - master
+   
  pull_request:
    branches:
-     - master
+    - master
+
 jobs:
-  job1:
-    runs-on: ubuntu-latest
-    steps: 
-    - name: Clone the repo 
-      uses: actions/checkout@v6
-    - name: Install nodejs
-      uses: actions/setup-node@v6
-      with: 
-        node-version: 18
-        cache: 'npm'
-    - name: Install node dependencies
-      run: npm ci 
-    - name: Execute test cases 
-      run: npm test
-    - name: Build the nodejs code
-      run: npm run build
-    - name: Upload Artifact 
-      uses: actions/upload-artifact@v4
-      with: 
-        name: nodejs-artifact
-        path: dist/
+ job1:
+  runs-on: ubuntu-latest
+  
+  steps:
+  - name: clone the repo
+    uses: actions/checkout@v6
+  
+  - name: install nodejs
+    uses: actions/setup-node@v6
+    with:
+      node-version: 18
+      cache: 'npm'
+     
+  - name: install dependencies
+     run: npm ci
+     
+  - name: execute test cases
+     run: npm test
+   
+  - name: build the code
+     run: npm run build
